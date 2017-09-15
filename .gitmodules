@@ -1,0 +1,6 @@
+[submodule "dots-survey"]
+	path = dots-survey
+	url = https://github.com/julekb/dots-survey
+[submodule "php_messages"]
+	path = php_messages
+	url = https://github.com/zubekj/php_messages
