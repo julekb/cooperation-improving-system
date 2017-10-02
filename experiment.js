@@ -89,12 +89,15 @@ var choice_response = {
 
 
 var timeline = [];
-timeline.push(entry_instruction);
-timeline.push(text_response);
-timeline.push(choice_response);
-timeline.push(instruction);
+// timeline.push(entry_instruction);
+// timeline.push(text_response);
+// timeline.push(choice_response);
+// timeline.push(instruction);
 
-//adding learnig stimuli
+// TODO explain how to use a slider
+
+
+//adding learning stimuli
 var training_stim = [];
 for (i = 0; i < TRAINING.length; i++) {
 	training_stim.push(['img/dots/dots_'+TRAINING[i]+'.png']);
@@ -103,7 +106,8 @@ for (i = 0; i < TRAINING.length; i++) {
 
 // adding learning phase
 
-for ( i = 0; i < training_stim.length; i++) {
+//for ( i = 0; i < training_stim.length; i++) {
+	for ( i = 0; i < 1; i++) {
 	var similarity_b = {
 		type: 'similarity',
 		stimuli: training_stim[i],
@@ -119,6 +123,66 @@ for ( i = 0; i < training_stim.length; i++) {
 	};
 	timeline.push(similarity_b);
 };
+
+var communication_phase_instruction = {
+	type: 'instructions',
+	pages: ["some further instructions about communication"],
+	show_clickable_nav: true
+}
+
+timeline.push(communication_phase_instruction)
+
+// TODO
+var peer_id = null;
+var client = null;
+
+// find a peer with php_messages
+var connect = {
+	type: 'call-function',
+	func: function(){
+		$(document).ready(function(){
+  			client = new MessageClient(function() { client.login("agent1", reset_agent); });
+  			client.login("agent1", reset_agent);
+		}); 
+		},
+	timing_post_trial: 1000 // TODO it should wait until the peer is found
+}
+
+timeline.push(connect)
+// TODO
+
+
+
+function pass_messages(msg) {
+      $("#messages").html("<input type=\"text\" name=\"name\" id=\"text_input\" /><button id=\"confirm_button\">Send</button>");
+      $("#confirm_button").click(function() { 
+        client.send_message(peer_id, "RESPONSE", $("#text_input").val());
+        $("#messages").html("Value send");
+      });
+      
+      client.read_message("RESPONSE", function(msg) { alert(msg["content"]) }, null, null);
+    }
+function reset_agent() {
+  peer_id = null;
+  wait_for_peer(); 
+}
+function wait_for_peer() {
+  client.read_message("JOIN_OFFER", function(msg) {
+    if(peer_id == null) {
+      peer_id = msg["sender"];
+      pass_messages();
+    }
+  }, null, null);
+}
+
+
+
+
+
+// adding communication phase
+
+
+
 timeline.push(additional_text_response);
 
 var thankyou = {
