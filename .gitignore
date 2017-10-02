@@ -1,7 +1,7 @@
 *.DS_Store
 
-dots-survey/jspsych-5.0.3/
-!dots-survey/jspsych-5.0.3/plugins/jspsych-similarity_modified.js
+jspsych-5.0.3/
+!jspsych-5.0.3/plugins/jspsych-similarity_modified.js
 
-dots-survey/img/
-dots-survey/data/
+img/
+data/
